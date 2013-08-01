@@ -13,7 +13,7 @@ soon ...
 
 ## Using Twitter Typeahead
 
-It's pretty easy. There is support for all three modes: local, prefetch and remote. The interface
+It's pretty easy. There has support for two modes: local and remote. The interface
 for each is the same. Here is an examle of each.
 
 
@@ -24,14 +24,10 @@ class TypeAhead {
 
   def render = {
     val local = List("red", "blue", "green", "orange", "purple", "white", "grey")
-    val prefetch = List("United States", "Canada", "United Kingdom", "Mexico", "Italy")
     val remote = List("foo", "bar", "baz")
 
     // stores candidates on the client's browser; sent on page load
     "@local *" #> TwitterTypeahead.local("colors", local, Empty, s =>  {}) &
-    
-    // stores candidates on the client's browser; ajax request after page load
-    "@prefetch *" #> TwitterTypeahead.prefetch("countries", prefetch, Empty, s =>  {}) &
     
     // tries to prefetch and store locally, if that fails it makes remote ajax requests on input
     "@remote *" #> TwitterTypeahead.remote("foo", remote, Empty, s =>  {})
