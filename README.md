@@ -28,16 +28,16 @@ class TypeAhead {
     val remote = List("foo", "bar", "baz")
 
     // stores candidates on the client's browser; sent on page load
-    "@local *" #> TwitterTypeahead.local("colors", local, Empty, s =>  Noop) &
+    "@local *" #> TwitterTypeahead.local("colors", local, Empty, s =>  {}) &
     
     // stores candidates on the client's browser; ajax request after page load
-    "@prefetch *" #> TwitterTypeahead.prefetch("countries", prefetch, Empty, s =>  Noop) &
+    "@prefetch *" #> TwitterTypeahead.prefetch("countries", prefetch, Empty, s =>  {}) &
     
     // doesn't store candidates; ajax requsts is made each time input changes
-    "@remote *" #> TwitterTypeahead.remote("foo", remote, Empty, s =>  Noop)
+    "@remote *" #> TwitterTypeahead.remote("foo", remote, Empty, s =>  {})
     
     // tries to store candidates locally, if this fails it falls back to remote
-    "@remoteWPrefetch *" #> TwitterTypeahead.remoteWithPrefetch("foo", remote, Empty, s =>  Noop)
+    "@remoteWPrefetch *" #> TwitterTypeahead.remoteWithPrefetch("foo", remote, Empty, s =>  {})
   }
 }
 
@@ -51,7 +51,7 @@ class TypeAhead {
 *
 * @return a text input field that hooked up to twitter typeahead
 */
-TwitterTypeadhead.local(name: String, candidates: List[String], deflt: Box[String], f: String => JsCmd)
+TwitterTypeadhead.local(name: String, candidates: List[String], deflt: Box[String], f: String => Any, attr: ElemAttr*)
 
 ```
 ### Future
