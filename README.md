@@ -33,11 +33,8 @@ class TypeAhead {
     // stores candidates on the client's browser; ajax request after page load
     "@prefetch *" #> TwitterTypeahead.prefetch("countries", prefetch, Empty, s =>  {}) &
     
-    // doesn't store candidates; ajax requsts is made each time input changes
+    // tries to prefetch and store locally, if that fails it makes remote ajax requests on input
     "@remote *" #> TwitterTypeahead.remote("foo", remote, Empty, s =>  {})
-    
-    // tries to store candidates locally, if this fails it falls back to remote
-    "@remoteWPrefetch *" #> TwitterTypeahead.remoteWithPrefetch("foo", remote, Empty, s =>  {})
   }
 }
 
@@ -51,7 +48,8 @@ class TypeAhead {
 *
 * @return a text input field that hooked up to twitter typeahead
 */
-TwitterTypeadhead.local(name: String, candidates: List[String], deflt: Box[String], f: String => Any, attr: ElemAttr*)
+TwitterTypeadhead.local(name: String, candidates: List[String], deflt: Box[String], 
+  f: String => Any, attr: ElemAttr*)
 
 ```
 ### Future
