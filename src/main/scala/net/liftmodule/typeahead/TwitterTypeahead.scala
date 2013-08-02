@@ -16,54 +16,41 @@ import JE._
 import scala.xml._
 
 
+object TwitterCandidates extends RequestVar(scala.collection.mutable.Map.empty[String, List[String]])
+
 object TwitterTypeahead {
 
-  implicit val formats = net.liftweb.json.DefaultFormats
 
   def local(name: String, candidates: List[String], deflt: Box[String],
     f: String => Any, attrs: ElemAttr*) = {
     
     val options = (
       ("name" -> name) ~ 
-      ("local" -> JArray(candidates map { JString(_) } ))
+      ("local" -> JArray(candidates map { JString(_) }))
     )
 
     typeahead(name, candidates, deflt, f, options, attrs: _*)
   }
 
-  def remote(name: String, candidates: List[String], deflt: Box[String],
+  def prefetch(name: String, candidates: List[String], deflt: Box[String],
     f: String => Any, attrs: ElemAttr*) = {
     
-    def suggest(value: JValue) = {
-
-      val matches = for {
-        q <- value.extractOpt[String].map(_.toLowerCase).toList
-        m <- candidates.filter(_.toLowerCase startsWith q)
-      } yield JString(m) 
-
-      JArray(matches)
-    }
+    val options = (
+      ("name" -> name) ~ 
+      ("prefetch" -> JString(prefetchUrl("id")))
+    )
+    typeahead(name, candidates, deflt, f, options, attrs: _*)
+  }
   
-    // adapeted from The Lift Cookbook page 63
-    val callbackContext  = new JsonContext(Full("callback"), Empty)
-    val runSuggestions = SHtml.jsonCall(JsVar("query"), callbackContext, suggest _)
-    S.appendJs(Function("askServer", "query" :: "callback" :: Nil, Run(runSuggestions.toJsCmd)))
+  def remote(name: String, candidates: List[String], deflt: Box[String],
+    f: String => Any, attrs: ElemAttr*) = {
 
     val options = (
       ("name" -> name) ~ 
-      ("source" -> JString("askServer"))
+      ("prefetch" -> JString(remoteUrl("id")))
     )
 
     typeahead(name, candidates, deflt, f, options, attrs: _*)
-  }
-  
-  private def script(id: String, options: JValue) = { 
-     JsRaw("""
-      (function($) {
-        $('#%s').typeahead( %s );
-      })(jQuery);
-     """.format(id, compact(render(options)))
-    )
   }
 
   private def typeahead(name: String, candidates: List[String], deflt: Box[String],
@@ -73,11 +60,30 @@ object TwitterTypeahead {
     val atts = addIdIfNeeded(id, attrs: _*)
     val attributes = placeholder(name, atts: _*)
     val typescript = script(id, options) 
-    
+   
+    TwitterCandidates.is += ("id" -> candidates)
+     
     <head_merge>
       { Script(OnLoad(typescript)) }
     </head_merge> ++
     SHtml.text(deflt openOr "", f, attributes: _*)
+  }
+
+  private val _url = "/twitter/typeahead/%s/%s%s"
+ 
+  private def makeUrl(part: String, query: Box[String])(id: String) = _url.format(part, id, query openOr "")
+
+  private val prefetchUrl = makeUrl("prefetch", Empty) _
+
+  private val remoteUrl = makeUrl("remote", Full("/%QUERY")) _ 
+
+  private def script(id: String, options: JValue) = { 
+     JsRaw("""
+      (function($) {
+        $('#%s').typeahead( %s );
+      })(jQuery);
+     """.format(id, compact(render(options)))
+    )
   }
 
   private def discoverId(attrs: ElemAttr*): String = {
