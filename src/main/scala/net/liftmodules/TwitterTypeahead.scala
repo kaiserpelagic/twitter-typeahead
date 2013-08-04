@@ -1,7 +1,7 @@
 package net.liftmodules
 
-import _root_.net.liftweb.http._
 import net.liftmodules.typeahead.{TypeaheadRest}
+import _root_.net.liftweb.http._
 
 object TwitterTypeahead {
 
