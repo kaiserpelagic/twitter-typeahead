@@ -47,7 +47,7 @@ You'll will also need
 <a href="https://github.com/twitter/typeahead.js/">typeahead.min.js</a>
 
 ```
-<script src="/scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/scripts/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/scripts/typeahead.min.js"></script>
 ```
 
