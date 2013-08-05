@@ -5,15 +5,45 @@ twitter-typeahead
 
 ## Setup and Configuration 
 
-Get the code from this repo. I'll hopefully have some releases on Sonatype soon.
+I currently only have builds for lift 2.5 and scala 2.10.x. If you need a different build let me know and I'll get one out,
+or you can send me a pull request
 
-### Integrating into your project
+in build.sbt
 
-soon ...
+```
+resolvers ++= Seq(
+  "snapshots" at "http://oss.sonatype.org/content/repositories/snapshots",
+  "releases" at "http://oss.sonatype.org/content/repositories/releases"
+)
+```
+
+add this to libraryDependencies
+
+```
+"net.liftmodules" %% "twittertypeahead_2.5" % "0.0.1-SNAPSHOT" % "compile"
+```
+
+### Setup
+
+In Boot.scala add 
+
+```scala
+import net.liftmodules.{ TwitterTypeahead }
+
+object Boot
+  def boot = {
+   ....
+   TwitterTypeahead.init()
+   ...
+  }
+}
+
+```
+
 
 ## Using Twitter Typeahead
 
-It's pretty easy. There has support for two modes: local and remote. The interface
+It's pretty easy. There is current support for two modes: local and remote. The interface
 for each is the same. Here is an examle of each.
 
 
@@ -45,6 +75,9 @@ class TypeAhead {
 * @return a text input field that hooked up to twitter typeahead
 */
 TwitterTypeadhead.local(name: String, candidates: List[String], deflt: Box[String], 
+  f: String => Any, attr: ElemAttr*)
+  
+TwitterTypeadhead.remote(name: String, candidates: List[String], deflt: Box[String], 
   f: String => Any, attr: ElemAttr*)
 
 ```
