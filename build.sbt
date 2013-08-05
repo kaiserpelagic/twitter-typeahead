@@ -73,7 +73,7 @@ pomExtra := (
 	 <developers>
 	    <developer>
 	      <id>kaiserpelagic</id>
-	      <name>Greg Kaiserpelagic</name>
+	      <name>Greg Flanagan</name>
 	      <url>https://github.com/kaiserpelagic</url>
 	     </developer>
 	 </developers>
