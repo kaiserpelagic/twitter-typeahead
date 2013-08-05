@@ -40,6 +40,17 @@ object Boot
 
 ```
 
+You'll will also need
+
+<a href="http://jquery.com/download/">jQuery-1.9.1.min.js</a>
+
+<a href="https://github.com/twitter/typeahead.js/">typeahead.min.js</a>
+
+```
+<script src="/scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/scripts/typeahead.min.js"></script>
+```
+
 
 ## Using Twitter Typeahead
 
